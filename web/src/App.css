@@ -1,0 +1,33 @@
+/* Typography */
+@font-face {
+  font-family: "Iosevka Fixed SS05 Web";
+  font-display: swap;
+  font-weight: 400;
+  font-stretch: expanded;
+  font-style: normal;
+  src: url("fonts/iosevka-fixed-ss05-extended.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Iosevka Fixed SS05 Web";
+  font-display: swap;
+  font-weight: 400;
+  font-stretch: expanded;
+  font-style: italic;
+  src: url("fonts/iosevka-fixed-ss05-extendeditalic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Iosevka Fixed SS05 Web";
+  font-display: swap;
+  font-weight: 700;
+  font-stretch: expanded;
+  font-style: normal;
+  src: url("fonts/iosevka-fixed-ss05-extendedbold.woff2") format("woff2");
+}
+
+html,
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Iosevka Fixed SS05 Web";
+  font-stretch: expanded;
+}
