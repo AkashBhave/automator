@@ -57,11 +57,11 @@ void handleSet() {
                 resObj["name"] = nodes[n].NAME;
 
                 if (server.arg(nodes[n].NAME) == "0") {
-                    digitalWrite(nodes[n].RELAY_PIN, HIGH);
+                    digitalWrite(nodes[n].RELAY_PIN, LOW);
                     nodes[n].STATE = false;
                     resObj["state"] = 0;
                 } else if (server.arg(nodes[n].NAME) == "1") {
-                    digitalWrite(nodes[n].RELAY_PIN, LOW);
+                    digitalWrite(nodes[n].RELAY_PIN, HIGH);
                     nodes[n].STATE = true;
                     resObj["state"] = 1;
                 } else {
@@ -88,7 +88,7 @@ void handleGet() {
             JsonObject resObj = res.createNestedObject();
             // Append data to nested object
             resObj["name"] = node.NAME;
-            resObj["state"] = (node.STATE) ? 0 : 1;
+            resObj["state"] = (node.STATE) ? 1 : 0;
         }
 
         // Stringify and send JSON
@@ -155,10 +155,10 @@ void updateNodes() {
             if (nodes[n].BUTTON_STATE == false) {
                 nodes[n].BUTTON_STATE = true;
                 if (nodes[n].STATE) {
-                    digitalWrite(nodes[n].RELAY_PIN, HIGH);
+                    digitalWrite(nodes[n].RELAY_PIN, LOW);
                     nodes[n].STATE = false;
                 } else {
-                    digitalWrite(nodes[n].RELAY_PIN, LOW);
+                    digitalWrite(nodes[n].RELAY_PIN, HIGH);
                     nodes[n].STATE = true;
                 }
             }
