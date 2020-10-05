@@ -9,10 +9,9 @@
 const char *ssid = "SSID";
 const char *password = "PASSWORD";
 // Static IP configuration
-IPAddress ip(192, 168, 1, 222);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress ip(192, 168, 68, 220);
+IPAddress gateway(192, 168, 68, 1);
 IPAddress subnet(255, 255, 255, 0);
-IPAddress dns(192, 168, 1, 1);
 ESP8266WebServer server(80);
 
 // Structure that holds the attributes of a node
@@ -120,7 +119,7 @@ void setupNodes() {
 }
 void setupWiFi() {
     WiFi.mode(WIFI_STA);
-    WiFi.config(ip, gateway, subnet, dns);
+    WiFi.config(ip, gateway, subnet);
     WiFi.begin(ssid, password);
     Serial.println("");
 
@@ -134,10 +133,15 @@ void setupWiFi() {
     Serial.println(ssid);
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
+    Serial.print("Subnet mask: ");
+    Serial.println(WiFi.subnetMask());
+    Serial.print("Gateway IP address: ");
+    Serial.println(WiFi.gatewayIP());
 
     if (MDNS.begin("esp8266")) {
         Serial.println("MDNS responder started");
     }
+
 }
 void setupRoutes() {
     server.on("/", handleRoot);
@@ -173,7 +177,7 @@ void setup(void) {
 
     setupNodes();
     setupWiFi();
-    setupRoutes();
+    setupRoutes();  
 
     server.begin();
 
