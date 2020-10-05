@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -68,16 +69,22 @@ func main() {
 		}
 
 		url := fmt.Sprintf("%s/set?%s=%s", ENDPOINT, node.Name, node.State)
-		_, err := client.Post(url, "application/json", new(bytes.Buffer))
+		res, err := client.Post(url, "application/json", new(bytes.Buffer))
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		fmt.Print(node.Name + ": ")
-		if node.State == "1" {
-			fmt.Println("ON")
+		resText, err := ioutil.ReadAll(res.Body)
+		if string(resText) == "null" {
+			fmt.Println("invalid node")
+			os.Exit(1)
 		} else {
-			fmt.Println("OFF")
+			fmt.Print(node.Name + ": ")
+			if node.State == "1" {
+				fmt.Println("ON")
+			} else {
+				fmt.Println("OFF")
+			}
 		}
 		os.Exit(0)
 	} else {
