@@ -23,12 +23,7 @@ type Node struct {
 }
 
 func main() {
-	if len(os.Args) < 2 { // info
-		fmt.Println("welcome to Automator")
-		os.Exit(0)
-	}
-	command := os.Args[1]
-	if command == "get" {
+	if len(os.Args) < 3 {
 		res, err := client.Get(fmt.Sprintf("%s/get", ENDPOINT))
 		if err != nil {
 			fmt.Println(err)
@@ -39,7 +34,7 @@ func main() {
 		json.NewDecoder(res.Body).Decode(&nodes)
 
 		for _, node := range nodes {
-			if len(os.Args) < 3 || node.Name == strings.ToLower(os.Args[2]) {
+			if len(os.Args) < 2 || node.Name == strings.ToLower(os.Args[1]) {
 				fmt.Print(node.Name + ": ")
 				if node.State == "1" {
 					fmt.Println("ON")
@@ -48,23 +43,18 @@ func main() {
 				}
 			}
 		}
-	} else if command == "set" {
-		if len(os.Args) < 4 {
-			fmt.Println("specify a node and a state")
-			os.Exit(1)
-		}
-
+	} else if len(os.Args) < 4 {
 		var state string
-		if strings.ToUpper(os.Args[3]) == "ON" || os.Args[3] == "1" {
+		if strings.ToUpper(os.Args[2]) == "ON" || os.Args[2] == "1" {
 			state = "1"
-		} else if strings.ToUpper(os.Args[3]) == "OFF" || os.Args[3] == "0" {
+		} else if strings.ToUpper(os.Args[2]) == "OFF" || os.Args[2] == "0" {
 			state = "0"
 		} else {
 			fmt.Println("invalid state")
 			os.Exit(1)
 		}
 		node := Node{
-			Name:  strings.ToLower(os.Args[2]),
+			Name:  strings.ToLower(os.Args[1]),
 			State: state,
 		}
 
@@ -88,7 +78,7 @@ func main() {
 		}
 		os.Exit(0)
 	} else {
-		fmt.Println("command must be either \"get\" or \"set\"")
+		fmt.Println("invalid arguments")
 		os.Exit(1)
 	}
 }
