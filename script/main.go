@@ -19,7 +19,7 @@ var client = &http.Client{Timeout: 10 * time.Second}
 // Node represents a single switch that can be toggled (ex. light, fan)
 type Node struct {
 	Name  string `json:"name"`
-	State string `json:"state"`
+	State int8   `json:"state"`
 }
 
 func main() {
@@ -36,7 +36,7 @@ func main() {
 		for _, node := range nodes {
 			if len(os.Args) < 2 || node.Name == strings.ToLower(os.Args[1]) {
 				fmt.Print(node.Name + ": ")
-				if node.State == "1" {
+				if node.State == 1 {
 					fmt.Println("ON")
 				} else {
 					fmt.Println("OFF")
@@ -44,11 +44,11 @@ func main() {
 			}
 		}
 	} else if len(os.Args) < 4 {
-		var state string
+		var state int8
 		if strings.ToUpper(os.Args[2]) == "ON" || os.Args[2] == "1" {
-			state = "1"
+			state = 1
 		} else if strings.ToUpper(os.Args[2]) == "OFF" || os.Args[2] == "0" {
-			state = "0"
+			state = 0
 		} else {
 			fmt.Println("invalid state")
 			os.Exit(1)
@@ -70,7 +70,7 @@ func main() {
 			os.Exit(1)
 		} else {
 			fmt.Print(node.Name + ": ")
-			if node.State == "1" {
+			if node.State == 1 {
 				fmt.Println("ON")
 			} else {
 				fmt.Println("OFF")
