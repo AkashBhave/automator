@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -19,7 +20,7 @@ var client = &http.Client{Timeout: 10 * time.Second}
 // Node represents a single switch that can be toggled (ex. light, fan)
 type Node struct {
 	Name  string `json:"name"`
-	State int8   `json:"state"`
+	State int    `json:"state"`
 }
 
 func main() {
@@ -44,7 +45,7 @@ func main() {
 			}
 		}
 	} else if len(os.Args) < 4 {
-		var state int8
+		var state int
 		if strings.ToUpper(os.Args[2]) == "ON" || os.Args[2] == "1" {
 			state = 1
 		} else if strings.ToUpper(os.Args[2]) == "OFF" || os.Args[2] == "0" {
@@ -53,9 +54,12 @@ func main() {
 			fmt.Println("invalid state")
 			os.Exit(1)
 		}
-		node := Node{
+		node := struct {
+			Name  string
+			State string
+		}{
 			Name:  strings.ToLower(os.Args[1]),
-			State: state,
+			State: strconv.Itoa(state),
 		}
 
 		url := fmt.Sprintf("%s/set?%s=%s", ENDPOINT, node.Name, node.State)
@@ -70,7 +74,7 @@ func main() {
 			os.Exit(1)
 		} else {
 			fmt.Print(node.Name + ": ")
-			if node.State == 1 {
+			if node.State == "1" {
 				fmt.Println("ON")
 			} else {
 				fmt.Println("OFF")
